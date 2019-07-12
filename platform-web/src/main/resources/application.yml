@@ -1,0 +1,49 @@
+server:
+  port: 8080
+  ssl:
+    key-store: classpath:1802727_service.emmazhang.top.pfx
+    key-store-password: ouhOwB16
+  session-timeout: 30
+  tomcat.max-threads: 0
+  tomcat.uri-encoding: UTF-8
+spring:
+  application:
+    name: pic
+  # 数据库配置
+  datasource:
+    name: test
+    url: jdbc:mysql://39.106.44.226:3306/platform?useUnicode=true&characterEncoding=UTF-8&useOldAliasMetadataBehavior=true&autoReconnect=true
+    #url: jdbc:mysql://192.168.0.180:3306/dsdb
+    username: root
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: select 1
+      maximum-pool-size: 10
+      minimum-idle: 0
+      idle-timeout: 18000
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  #typeAliasesPackage: com.daosu.mds.dispatch.entity,com.daosu.mds.resource.entity
+  global-config:
+    # 数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID",ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: ID_WORKER_STR
+      #驼峰下划线转换
+      column-underline: true
+      #数据库大写下划线转换
+      #capital-mode: true
+      #逻辑删除配置
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+    banner: true
+    worker-id: 1
+    datacenter-id: 1
+  # 原生配置
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
