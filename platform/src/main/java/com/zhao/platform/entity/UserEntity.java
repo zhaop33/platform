@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 /**
  * <p>
@@ -21,7 +24,7 @@ import org.springframework.security.core.GrantedAuthority;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("t_pf_user_")
-public class UserEntity extends BaseEntity implements GrantedAuthority {
+public class UserEntity extends BaseEntity implements UserDetails {
 
     private static final long serialVersionUID = 1L;
     @TableId("id_")
@@ -46,10 +49,51 @@ public class UserEntity extends BaseEntity implements GrantedAuthority {
     private String avatarUrl;
     @TableField("description_")
     private String description;
-
+    @TableField(exist = false)
+    private Collection<GrantedAuthority> authorities;
+    @TableField(exist = false)
+    private Boolean accountNonExpired = true;
+    @TableField(exist = false)
+    private Boolean accountNonLocked = true;
+    @TableField(exist = false)
+    private Boolean credentialsNonExpired = true;
+    @TableField(exist = false)
+    private Boolean enable = true;
+    @TableField(exist = false)
+    private String password = "";
 
     @Override
-    public String getAuthority() {
-        return null;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.enable;
     }
 }

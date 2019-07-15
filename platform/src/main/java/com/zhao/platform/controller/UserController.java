@@ -1,6 +1,7 @@
 package com.zhao.platform.controller;
 
 
+import com.zhao.platform.component.ResultInfo;
 import com.zhao.platform.entity.UserEntity;
 import com.zhao.platform.service.IUserService;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +26,17 @@ public class UserController {
 
     @ApiOperation(value = "添加", notes = "添加")
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String selectFiles(@RequestBody UserEntity user) {
-        return String.valueOf(userService.save(user));
+    public ResultInfo selectFiles(@RequestBody UserEntity user) {
+        return ResultInfo.getInstance().setSingleData(userService.save(user));
+    }
+    @ApiOperation(value = "获取角色", notes = "获取角色")
+    @RequestMapping(value = "/roles", method = RequestMethod.GET)
+    public ResultInfo getRoleByUserId(@RequestParam String userId) {
+        return ResultInfo.getInstance().setSingleData(userService.getRoleByUserId(userId));
+    }
+    @ApiOperation(value = "获取权限", notes = "获取权限")
+    @RequestMapping(value = "/permissions", method = RequestMethod.GET)
+    public ResultInfo getPermissionByUserId(@RequestParam String userId) {
+        return ResultInfo.getInstance().setSingleData(userService.getPermissionByUserId(userId));
     }
 }
