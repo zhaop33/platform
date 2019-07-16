@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.zhao.platform.modal.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -50,19 +52,21 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @TableField("description_")
     private String description;
     @TableField(exist = false)
+    @ApiModelProperty(hidden = true)
     private Collection<GrantedAuthority> authorities;
-    @TableField(exist = false)
-    private Boolean accountNonExpired = true;
-    @TableField(exist = false)
-    private Boolean accountNonLocked = true;
-    @TableField(exist = false)
-    private Boolean credentialsNonExpired = true;
-    @TableField(exist = false)
-    private Boolean enable = true;
-    @TableField(exist = false)
+//    @TableField(exist = false)
+//    private Boolean accountNonExpired = true;
+//    @TableField(exist = false)
+//    private Boolean accountNonLocked = true;
+//    @TableField(exist = false)
+//    private Boolean credentialsNonExpired = true;
+//    @TableField(exist = false)
+//    private Boolean enable = true;
+    @TableField(exist = true,value = "password_")
     private String password = "";
 
     @Override
+    @ApiModelProperty(hidden = true)
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
     }
@@ -73,27 +77,34 @@ public class UserEntity extends BaseEntity implements UserDetails {
     }
 
     @Override
+    @ApiModelProperty(hidden = true)
     public String getUsername() {
         return this.name;
     }
 
     @Override
+    @ApiModelProperty(hidden = true)
     public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
+        return true;
     }
 
     @Override
+    @ApiModelProperty(hidden = true)
     public boolean isAccountNonLocked() {
-        return this.accountNonLocked;
+        return true;
     }
 
     @Override
+    @ApiModelProperty(hidden = true)
     public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
+        return true;
     }
 
     @Override
+    @ApiModelProperty(hidden = true)
     public boolean isEnabled() {
-        return this.enable;
+        return true;
     }
+
+
 }

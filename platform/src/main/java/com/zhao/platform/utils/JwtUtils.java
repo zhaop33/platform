@@ -1,10 +1,7 @@
 package com.zhao.platform.utils;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.crypto.SecretKey;
@@ -21,6 +18,7 @@ public class JwtUtils {
      * token 过期时间, 单位: 秒. 这个值表示 30 天
      */
     private static final long TOKEN_EXPIRED_TIME = 30 * 24 * 60 * 60;
+    private static final long TOKEN_EXPIRED_TIME1 = 1000 * 60 * 60;
 
     /**
      * jwt 加密解密密钥
@@ -60,7 +58,7 @@ public class JwtUtils {
                 .setIssuedAt(now)
                 /* 设置签名使用的签名算法和签名使用的秘钥 */
                 .signWith(signatureAlgorithm, secretKey);
-        long expMillis = nowMillis + TOKEN_EXPIRED_TIME;
+        long expMillis = nowMillis + TOKEN_EXPIRED_TIME1;
         Date exp = new Date(expMillis);
         /* 设置过期时间 */
         builder.setExpiration(exp);
@@ -92,7 +90,9 @@ public class JwtUtils {
                     /* 设置签名的秘钥 */
                     .setSigningKey(key)
                     .parseClaimsJws(token).getBody();
-        } catch (Exception e) {
+        } catch (ExpiredJwtException e) {
+            claims = e.getClaims();
+        } catch (Exception e1){
             claims = null;
         }
         /* 设置需要解析的jwt */

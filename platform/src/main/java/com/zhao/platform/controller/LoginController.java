@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author zhaoyanjiang-pc
  */
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/")
 public class LoginController {
 
 
@@ -23,8 +23,13 @@ public class LoginController {
     private IUserService userService;
 
     @ApiOperation(value = "登陆", notes = "登陆")
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResultInfo selectFiles(@RequestBody LoginVO loginVO) {
-        return ResultInfo.getInstance();
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    public ResultInfo login(@RequestBody LoginVO vo) {
+        return null;
+    }
+    @ApiOperation(value = "登出", notes = "登出")
+    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    public ResultInfo logout() {
+        return null;
     }
 }

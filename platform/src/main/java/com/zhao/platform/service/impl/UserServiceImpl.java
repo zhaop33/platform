@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -38,6 +40,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     @Autowired private IGroupRoleService groupRoleService;
     @Autowired private IPermissionService permissionService;
     @Autowired private IUserAuthsService userAuthsService;
+    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired private IRoleService roleService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -45,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         if(userDetails == null){
             throw new UsernameNotFoundException("用户名没有发现");
         }
-        List<String> permissions = this.getPermissionByUserId(username);
+        List<String> permissions = this.getRolesAndPermissionsByUserId(userDetails.getId());
         List<GrantedAuthority> simpleGrantedAuthorities = new ArrayList<>(permissions.size());
         for (String permission : permissions) {
             simpleGrantedAuthorities.add(new SimpleGrantedAuthority(permission));
@@ -53,10 +57,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         userDetails.setAuthorities(simpleGrantedAuthorities);
         return userDetails;
     }
-
-    @Override
-    public List<String> getPermissionByUserId(String id) {
-        List<String> roleIds = getRoleByUserId(id);
+    private List<String> getRolesAndPermissionsByUserId(String userId){
+        List<String> roleIds = getRoleByUserId(userId);
+        List<String> permissions = getPermissionByRoleIds(roleIds);
+        if(!CollectionUtils.isEmpty(roleIds)){
+            Optional.ofNullable(roleService.list(new QueryWrapper<RoleEntity>().lambda().in(RoleEntity::getId,roleIds))).ifPresent(roles -> {
+                roles.forEach(role -> permissions.add("ROLE_" + role.getName()));
+            });
+        }
+        return permissions;
+    }
+    private List<String> getPermissionByRoleIds(List<String> roleIds){
         final List<String> permission = Collections.synchronizedList(new ArrayList<>());
         if(!CollectionUtils.isEmpty(roleIds)){
             Optional.ofNullable(rolePermissionService.list(new QueryWrapper<RolePermissionEntity>().lambda().in(RolePermissionEntity::getRoleId,roleIds))).ifPresent(rolePermissions -> {
@@ -69,6 +80,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             });
         }
         return permission;
+    }
+    @Override
+    public List<String> getPermissionByUserId(String id) {
+        List<String> roleIds = getRoleByUserId(id);
+        return getPermissionByRoleIds(roleIds);
     }
 
     @Override
@@ -97,5 +113,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             });
         });
         return null;
+    }
+
+    @Override
+    public boolean save(UserEntity entity) {
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        return super.save(entity);
     }
 }
