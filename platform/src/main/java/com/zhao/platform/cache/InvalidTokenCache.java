@@ -3,6 +3,7 @@ package com.zhao.platform.cache;
 import com.zhao.platform.configuration.ThreadConfig;
 import com.zhao.platform.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.Date;
 import java.util.List;

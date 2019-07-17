@@ -1,6 +1,7 @@
-package com.zhao.platform.configuration;
+package com.zhao.platform.security.configuer;
 
-import com.zhao.platform.filter.MyUsernamePasswordAuthenticationFilter;
+import com.zhao.platform.security.filter.MyUsernamePasswordAuthenticationFilter;
+import com.zhao.platform.security.handler.HttpStatusLoginFailureHandler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;

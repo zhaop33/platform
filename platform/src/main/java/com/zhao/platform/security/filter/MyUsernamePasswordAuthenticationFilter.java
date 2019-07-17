@@ -1,4 +1,4 @@
-package com.zhao.platform.filter;
+package com.zhao.platform.security.filter;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zhao.platform.vo.LoginVO;
+import netscape.javascript.JSObject;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -39,11 +41,12 @@ public class MyUsernamePasswordAuthenticationFilter extends AbstractAuthenticati
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
 		String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
-		String username = null, password = null;
+		String username = null, password = null, type = null;
 		if(StringUtils.hasText(body)) {
-		    JSONObject jsonObj = JSON.parseObject(body);
-		    username = jsonObj.getString("userName");
-		    password = jsonObj.getString("cert");
+			LoginVO login = JSONObject.parseObject(body, LoginVO.class);
+			username = login.getUserName();
+			password = login.getCert();
+			type =  login.getLoginType();
 		}	
 		
 		if (username == null) {

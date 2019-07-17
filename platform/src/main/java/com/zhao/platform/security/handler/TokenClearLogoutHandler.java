@@ -1,7 +1,8 @@
-package com.zhao.platform.configuration;
+package com.zhao.platform.security.handler;
 
 import com.zhao.platform.cache.InvalidTokenCache;
 import com.zhao.platform.service.IUserService;
+import com.zhao.platform.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
@@ -20,7 +21,7 @@ public class TokenClearLogoutHandler implements LogoutHandler {
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 		clearToken(authentication);
-        String authInfo = request.getHeader("Authorization");
+        String authInfo = request.getHeader(JwtUtils.HEAD_TOKEN);
         if(StringUtils.isNoneBlank(authInfo)){
             InvalidTokenCache.invalid(authInfo);
         }

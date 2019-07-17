@@ -1,4 +1,4 @@
-package com.zhao.platform.configuration;
+package com.zhao.platform.security.token;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AbstractAuthenticationToken;

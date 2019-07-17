@@ -1,5 +1,6 @@
 package com.zhao.platform.configuration;
 
+import com.zhao.platform.utils.JwtUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -40,7 +41,7 @@ public class Swagger2Configuration extends WebMvcConfigurationSupport {
         //添加head参数start
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
-        tokenPar.name("Authorization").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        tokenPar.name(JwtUtils.HEAD_TOKEN).description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         pars.add(tokenPar.build());
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())

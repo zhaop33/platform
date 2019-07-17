@@ -1,5 +1,6 @@
-package com.zhao.platform.configuration;
+package com.zhao.platform.security.handler;
 
+import com.zhao.platform.security.token.JwtAuthenticationToken;
 import com.zhao.platform.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * @author zhaoyanjiang-pc
+ */
 public class JwtRefreshSuccessHandler implements AuthenticationSuccessHandler{
 	/* 刷新间隔5分钟 */
 	private static final int tokenRefreshInterval = 300;

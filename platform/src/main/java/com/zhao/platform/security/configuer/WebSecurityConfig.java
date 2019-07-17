@@ -1,7 +1,12 @@
-package com.zhao.platform.configuration;
+package com.zhao.platform.security.configuer;
 
-import com.zhao.platform.filter.OptionsRequestFilter;
+import com.zhao.platform.security.filter.OptionsRequestFilter;
+import com.zhao.platform.security.handler.JsonLoginSuccessHandler;
+import com.zhao.platform.security.handler.JwtRefreshSuccessHandler;
+import com.zhao.platform.security.handler.TokenClearLogoutHandler;
+import com.zhao.platform.security.provider.JwtAuthenticationProvider;
 import com.zhao.platform.service.IUserService;
+import com.zhao.platform.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		    .and()
 		    .headers().addHeaderWriter(new StaticHeadersWriter(Arrays.asList(
 		    		new Header("Access-control-Allow-Origin","*"),
-		    		new Header("Access-Control-Expose-Headers","Authorization"))))
+		    		new Header("Access-Control-Expose-Headers", JwtUtils.HEAD_TOKEN))))
 		    .and()
 		    .addFilterAfter(new OptionsRequestFilter(), CorsFilter.class)
 		    .apply(new JsonLoginConfigurer<>()).loginSuccessHandler(jsonLoginSuccessHandler())
@@ -138,7 +143,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		configuration.setAllowedOrigins(Collections.singletonList("*"));
 		configuration.setAllowedMethods(Arrays.asList("GET","POST","HEAD", "OPTION"));
 		configuration.setAllowedHeaders(Collections.singletonList("*"));
-		configuration.addExposedHeader("Authorization");
+		configuration.addExposedHeader(JwtUtils.HEAD_TOKEN);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;

@@ -1,5 +1,6 @@
-package com.zhao.platform.configuration;
+package com.zhao.platform.security.provider;
 
+import com.zhao.platform.security.token.JwtAuthenticationToken;
 import com.zhao.platform.service.IUserService;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AuthenticationProvider;

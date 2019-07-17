@@ -1,4 +1,4 @@
-package com.zhao.platform.configuration;
+package com.zhao.platform.security.handler;
 
 import com.zhao.platform.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;

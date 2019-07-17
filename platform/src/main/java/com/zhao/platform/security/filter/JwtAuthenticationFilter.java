@@ -1,7 +1,7 @@
-package com.zhao.platform.filter;
+package com.zhao.platform.security.filter;
 
 import com.zhao.platform.cache.InvalidTokenCache;
-import com.zhao.platform.configuration.JwtAuthenticationToken;
+import com.zhao.platform.security.token.JwtAuthenticationToken;
 import com.zhao.platform.utils.JwtUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
 
 	public JwtAuthenticationFilter() {
-		this.requiresAuthenticationRequestMatcher = new RequestHeaderRequestMatcher("Authorization");
+		this.requiresAuthenticationRequestMatcher = new RequestHeaderRequestMatcher(JwtUtils.HEAD_TOKEN);
 	}
 	
 	@Override
@@ -52,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	}
 	
 	protected String getJwtToken(HttpServletRequest request) {
-		String authInfo = request.getHeader("Authorization");
+		String authInfo = request.getHeader(JwtUtils.HEAD_TOKEN);
 		return authInfo;
 	}
 

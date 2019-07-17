@@ -1,6 +1,7 @@
-package com.zhao.platform.configuration;
+package com.zhao.platform.security.configuer;
 
-import com.zhao.platform.filter.JwtAuthenticationFilter;
+import com.zhao.platform.security.filter.JwtAuthenticationFilter;
+import com.zhao.platform.security.handler.HttpStatusLoginFailureHandler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -31,7 +32,6 @@ public class JwtLoginConfigurer<T extends JwtLoginConfigurer<T, B>, B extends Ht
 		authFilter.setPermissiveUrl(urls);
 		return this;
 	}
-	
 	public JwtLoginConfigurer<T, B> tokenValidSuccessHandler(AuthenticationSuccessHandler successHandler){
 		authFilter.setAuthenticationSuccessHandler(successHandler);
 		return this;
