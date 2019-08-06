@@ -37,7 +37,7 @@ import java.util.Collections;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
-
+	static final String DEF_LOGOUT_URL = "/logout";
 	@Autowired private IUserService userService;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -69,11 +69,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		    .addFilterAfter(new OptionsRequestFilter(), CorsFilter.class)
 		    .apply(new JsonLoginConfigurer<>()).loginSuccessHandler(jsonLoginSuccessHandler())
 		    .and()
-		    .apply(new JwtLoginConfigurer<>()).tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls("/logout")
+		    .apply(new JwtLoginConfigurer<>()).tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls(WebSecurityConfig.DEF_LOGOUT_URL)
 		    .and()
 		    .logout()
 			/* 默认就是"/logout" */
-			.logoutUrl("/logout")
+			.logoutUrl(WebSecurityConfig.DEF_LOGOUT_URL)
 			.addLogoutHandler(tokenClearLogoutHandler())
 			.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
 		    .and()

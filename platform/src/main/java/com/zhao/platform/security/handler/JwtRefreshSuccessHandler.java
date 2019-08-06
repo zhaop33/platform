@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+
 /**
  * @author zhaoyanjiang-pc
  */
 public class JwtRefreshSuccessHandler implements AuthenticationSuccessHandler{
 	/* 刷新间隔5分钟 */
 	private static final int tokenRefreshInterval = 300;
-
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -34,10 +34,9 @@ public class JwtRefreshSuccessHandler implements AuthenticationSuccessHandler{
             response.setHeader(JwtUtils.HEAD_TOKEN, newToken);
         }	
 	}
-	
+
 	protected boolean shouldTokenRefresh(Date issueAt){
         LocalDateTime issueTime = LocalDateTime.ofInstant(issueAt.toInstant(), ZoneId.systemDefault());
         return LocalDateTime.now().minusSeconds(tokenRefreshInterval).isAfter(issueTime);
     }
-
 }

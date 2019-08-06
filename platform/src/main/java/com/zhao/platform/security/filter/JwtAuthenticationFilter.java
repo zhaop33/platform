@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	private RequestMatcher requiresAuthenticationRequestMatcher;
 	private List<RequestMatcher> permissiveRequestMatchers;
 	private AuthenticationManager authenticationManager;
-	
+
 
 	private AuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
 	private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
@@ -43,14 +43,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	public JwtAuthenticationFilter() {
 		this.requiresAuthenticationRequestMatcher = new RequestHeaderRequestMatcher(JwtUtils.HEAD_TOKEN);
 	}
-	
+
 	@Override
 	public void afterPropertiesSet() {
 		Assert.notNull(authenticationManager, "authenticationManager must be specified");
 		Assert.notNull(successHandler, "AuthenticationSuccessHandler must be specified");
 		Assert.notNull(failureHandler, "AuthenticationFailureHandler must be specified");
 	}
-	
 	protected String getJwtToken(HttpServletRequest request) {
 		String authInfo = request.getHeader(JwtUtils.HEAD_TOKEN);
 		return authInfo;
